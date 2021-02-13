@@ -12,8 +12,8 @@ import (
 )
 
 func main() {
-	http.Handle("/circle", http.HandlerFunc(circle))
-	err := http.ListenAndServe(":2003", nil)
+	http.Handle("/", http.HandlerFunc(circle))
+	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}
