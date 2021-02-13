@@ -1,7 +1,6 @@
 package crema
 
 import (
-	"fmt"
 	"math"
 	"math/rand"
 	"time"
@@ -31,7 +30,6 @@ func (c *Crema) Generate(min, max float64) {
 			break
 		}
 	}
-	fmt.Println("tried ", t)
 }
 
 func (c *Crema) Validate(a Circle) bool {

@@ -1,0 +1,12 @@
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: kremanaughts
+  annotaitons:
+    sugar.knative.dev/domainmapping: krema.getrekt.dev
+spec:
+  template:
+    spec:
+      containers:
+        - image: ko://github.com/n3wscott/kremanaughts
