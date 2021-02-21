@@ -6,6 +6,7 @@ import (
 )
 
 // Comments from https://css-tricks.com/svg-path-syntax-illustrated-guide/
+// Better docs here: https://www.w3.org/TR/SVG/paths.html#PathDataCubicBezierCommands
 
 func New() *Path {
 	return &Path{b: strings.Builder{}}
@@ -77,7 +78,7 @@ func (p *Path) MoveYABS(y float64) *Path {
 }
 
 // v y		Draw a line vertically relatively down y (or up if a negative value)
-func (p *Path) MoveY(y int) *Path {
+func (p *Path) MoveY(y float64) *Path {
 	p.b.WriteString(fmt.Sprintf("v %.4f ", y))
 	return p
 }
@@ -90,23 +91,49 @@ func (p *Path) Connect() *Path {
 
 /*
 Curves
+*/
 
-C cX1,cY1 cX2,cY2 eX,eY
-	Draw a bezier curve based on two bezier control points and end at specified coordinates
-c
-	Same with all relative values
-S cX2,cY2 eX,eY
-	Basically a C command that assumes the first bezier control point is a reflection of the last bezier point used in the previous S or C command
-s
-	Same with all relative values
-Q cX,cY eX,eY
-	Draw a bezier curve based a single bezier control point and end at specified coordinates
-q
-	Same with all relative values
-T eX,eY
-	Basically a Q command that assumes the first bezier control point is a reflection of the last bezier point used in the previous Q or T command
-t
-	Same with all relative values
+// C cX1,cY1 cX2,cY2 eX,eY
+// Draw a bezier curve based on two bezier control points and end at specified coordinates
+func (p *Path) CurveABS(cx1, cy1, cx2, cy2, x2, y2 float64) *Path {
+	p.b.WriteString(fmt.Sprintf("C %.4f,%.4f, %.4f,%.4f, %.4f,%.4f", cx1, cy1, cx2, cy2, x2, y2))
+	return p
+}
+
+// c Same with all relative values
+// TODO
+
+// S cX2,cY2 eX,eY
+// Basically a C command that assumes the first bezier control point is a reflection of the last bezier point used in the previous S or C command
+func (p *Path) SymmetricABS(cx1, cy1, x2, y2 float64) *Path {
+	p.b.WriteString(fmt.Sprintf("S %.4f,%.4f, %.4f,%.4f", cx1, cy1, x2, y2))
+	return p
+}
+
+// s
+//	Same with all relative values
+
+// Q cX,cY eX,eY
+// Draw a bezier curve based a single bezier control point and end at specified coordinates
+func (p *Path) QuadraticABS(cx1, cy1, x2, y2 float64) *Path {
+	p.b.WriteString(fmt.Sprintf("Q %.4f,%.4f, %.4f,%.4f", cx1, cy1, x2, y2))
+	return p
+}
+
+// q
+// Same with all relative values
+// TODO:
+
+// T eX,eY
+// 	Basically a Q command that assumes the first bezier control point is a reflection of the last bezier point used in the previous Q or T command
+func (p *Path) QuadraticSmoothABS(x2, y2 float64) *Path {
+	p.b.WriteString(fmt.Sprintf("T %.4f,%.4f", x2, y2))
+	return p
+}
+
+// t
+//	Same with all relative values
+/*
 A rX,rY rotation, arc, sweep, eX,eY
 	Draw an arc that is based on the curve an oval makes. First define the width and height of the oval. Then the rotation of the oval. Along with the end point, this makes two possible ovals. So the arc and sweep are either 0 or 1 and determine which oval and which path it will take.
 a
